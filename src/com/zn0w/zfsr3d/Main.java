@@ -1,5 +1,6 @@
 package com.zn0w.zfsr3d;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import com.zn0w.zfsr3d.fs_components.FileTree;
@@ -18,11 +19,10 @@ public class Main {
         try {
 			FileTree fs = FileTreeGenerator.getFSTree(dirName);
 			
-			RenderObject test_background = new DirectoryRenderObject(0, 0, 1280, 720);
-			
 			Display display = new Display(1280, 720, "zfsr3d display test");
-			display.getRenderObjects().add(test_background);
-			// TODO this should be rendered in a loop
+			
+			display.setClearColor(Color.darkGray);
+			
 			while (display.isClosed()) {
 				display.render();
 			}
