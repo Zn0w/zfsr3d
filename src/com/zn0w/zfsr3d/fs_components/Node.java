@@ -47,4 +47,12 @@ public class Node {
 		this.component_name = component_name;
 	}
 	
+	public boolean hasChildren() {
+		return children.size() != 0;
+	}
+	
+	public boolean isDirectory() {
+		return !component_name.contains(".");
+	}
+	
 }

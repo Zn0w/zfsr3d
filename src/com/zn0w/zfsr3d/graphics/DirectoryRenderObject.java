@@ -17,8 +17,8 @@ public class DirectoryRenderObject extends RenderObject {
 	
 	@Override
 	void draw(Graphics g) {
-		g.setColor(Color.green);
-		g.fillRect(x1, y1, x2, y2);
+		g.setColor(Color.yellow);
+		g.fillRect(x1, y1, x2 - x1, y2 - y1);
 	}
 	
 }

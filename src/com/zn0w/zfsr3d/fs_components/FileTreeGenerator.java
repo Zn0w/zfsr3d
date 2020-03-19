@@ -24,8 +24,7 @@ public class FileTreeGenerator {
 	}
 	
 	static public void getChildren(Node node, String abs_path) throws IOException {
-		// if it's not a directory
-		if (node.getComponentName().contains(".")) {
+		if (!node.isDirectory()) {
 			return;
 		}
 		
