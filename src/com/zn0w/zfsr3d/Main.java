@@ -50,10 +50,10 @@ public class Main {
 		
 		RenderObject render_object;
 		if (node.isDirectory()) {
-			render_object = new DirectoryRenderObject(x1, y1, x2, y2);
+			render_object = new DirectoryRenderObject(x1, y1, x2, y2, node.getComponentName());
 		}
 		else {
-			render_object = new FileRenderObject(x1, y1, x2, y2);
+			render_object = new FileRenderObject(x1, y1, x2, y2, node.getComponentName());
 		}
 		list.add(render_object);
 		
