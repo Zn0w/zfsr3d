@@ -22,6 +22,8 @@ public class Display {
     private int width, height;
 	private Color clear_color;
 	
+	private Camera camera;
+	
 	public Display(int width, int height, String title) {
 		this.width = width;
 		this.height = height;
@@ -38,6 +40,8 @@ public class Display {
 		frame.setLocationRelativeTo(null);
 		frame.setContentPane(panel);
 		frame.setVisible(true);
+		
+		camera = new Camera(0, 0, width, height);
 	}
 	
 	public void render() {
@@ -46,7 +50,9 @@ public class Display {
 		g.fillRect(0, 0, width, height);
 		
 		for (RenderObject render_object : render_objects) {
-			render_object.draw(g);
+			if (camera.captures(render_object)) {
+				render_object.draw(g, -camera.origin_x, -camera.origin_y);
+			}
 		}
 		
 		Graphics g2 = panel.getGraphics();
@@ -80,6 +86,10 @@ public class Display {
 	
 	public JFrame getWindowHandle() {
 		return frame;
+	}
+	
+	public Camera getCamera() {
+		return camera;
 	}
 	
 }

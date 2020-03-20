@@ -5,7 +5,6 @@ import java.awt.Graphics;
 
 public class DirectoryRenderObject extends RenderObject {
 	
-	public int x1, y1, x2, y2;
 	public String name;
 	
 	
@@ -19,11 +18,16 @@ public class DirectoryRenderObject extends RenderObject {
 	}
 	
 	@Override
-	void draw(Graphics g) {
+	void draw(Graphics g, int offset_x, int offset_y) {
+		int relative_x = x1 + offset_x;
+		int relative_y = y1 + offset_y;
+		int width = x2 - x1;
+		int height = y2 - y1;
+		
 		g.setColor(Color.yellow);
-		g.fillRect(x1, y1, x2 - x1, y2 - y1);
+		g.fillRect(relative_x, relative_y, width, height);
 		g.setColor(Color.RED);
-		g.drawString(name, x1, y1);
+		g.drawString(name, relative_x, relative_y);
 	}
 	
 }

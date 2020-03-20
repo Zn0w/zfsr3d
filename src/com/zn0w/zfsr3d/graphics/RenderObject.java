@@ -4,6 +4,9 @@ import java.awt.Graphics;
 
 public abstract class RenderObject {
 	
-	abstract void draw(Graphics g);
+	public int x1, y1, x2, y2;
+	
+	
+	abstract void draw(Graphics g, int offset_x, int offset_y);
 	
 }

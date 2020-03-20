@@ -17,6 +17,7 @@ import com.zn0w.zfsr3d.input.KeyboardInput;
 public class Main {
 	
 	public static int WIDTH = 1280;
+	public static int CAMERA_SPEED = 5;
 	
 	
 	public static void main(String[] args) {
@@ -37,10 +38,18 @@ public class Main {
 			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), initial_size, 0.75, WIDTH / 2, 10 + initial_size / 2);
 			
 			while (display.isClosed()) {
-				if (keyboard_input.isKeyPressed(Key.ARROW_UP)) {
-					display.close();
-					continue;
-				}
+				int dx = 0, dy = 0;
+				if (keyboard_input.isKeyPressed(Key.ARROW_UP))
+					dy = -CAMERA_SPEED;
+				else if (keyboard_input.isKeyPressed(Key.ARROW_DOWN))
+					dy = CAMERA_SPEED;
+				
+				if (keyboard_input.isKeyPressed(Key.ARROW_LEFT))
+					dx = -CAMERA_SPEED;
+				else if (keyboard_input.isKeyPressed(Key.ARROW_RIGHT))
+					dx = CAMERA_SPEED;
+				
+				display.getCamera().move(dx, dy);
 				
 				display.render();
 			}
