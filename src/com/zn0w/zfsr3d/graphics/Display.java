@@ -51,7 +51,7 @@ public class Display {
 		
 		for (RenderObject render_object : render_objects) {
 			if (camera.captures(render_object)) {
-				render_object.draw(g, -camera.origin_x, -camera.origin_y);
+				render_object.draw(g, -camera.origin_x, -camera.origin_y, camera.scale);
 			}
 		}
 		

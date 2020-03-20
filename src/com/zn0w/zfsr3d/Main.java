@@ -40,6 +40,7 @@ public class Main {
 			
 			MouseInput mouse_input = new MouseInput();
 			display.getWindowHandle().addMouseListener(mouse_input);
+			display.getWindowHandle().addMouseWheelListener(mouse_input);
 			
 			int initial_size = 100;
 			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), initial_size, 0.75, WIDTH / 2, 10 + initial_size / 2);
@@ -68,6 +69,10 @@ public class Main {
 						dy = mouse_action.y - display.getHeight() / 2;
 						
 						display.getCamera().move(dx, dy);
+					}
+					else if (mouse_action.type == MouseActionType.SCROLL_UP ||
+							mouse_action.type == MouseActionType.SCROLL_DOWN) {
+						display.getCamera().adjustScale(mouse_action.scroll / 10.0);
 					}
 				}
 				mouse_input.events.clear();

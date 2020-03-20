@@ -10,11 +10,11 @@ public class FileRenderObject extends RenderObject {
 	}
 	
 	@Override
-	void draw(Graphics g, int offset_x, int offset_y) {
-		int relative_x = x1 + offset_x;
-		int relative_y = y1 + offset_y;
-		int width = x2 - x1;
-		int height = y2 - y1;
+	void draw(Graphics g, int offset_x, int offset_y, double scale) {
+		int relative_x = (int) ((x1 + offset_x) * scale);
+		int relative_y = (int) ((y1 + offset_y) * scale);
+		int width = (int) ((x2 - x1) * scale);
+		int height = (int) ((y2 - y1) * scale);
 		
 		g.setColor(Color.blue);
 		g.fillOval(relative_x, relative_y, width, height);

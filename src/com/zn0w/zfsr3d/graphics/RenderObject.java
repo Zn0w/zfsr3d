@@ -17,6 +17,6 @@ public abstract class RenderObject {
 		this.name = name;
 	}
 	
-	abstract void draw(Graphics g, int offset_x, int offset_y);
+	abstract void draw(Graphics g, int offset_x, int offset_y, double scale);
 	
 }
