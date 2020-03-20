@@ -14,6 +14,9 @@ import com.zn0w.zfsr3d.graphics.RenderObject;
 
 public class Main {
 	
+	public static int WIDTH = 1280;
+	
+	
 	public static void main(String[] args) {
 		System.out.println("Hello World! It's Zn0w File System Respresentation 3D");
 		
@@ -25,7 +28,8 @@ public class Main {
 			Display display = new Display(1280, 720, "zfsr3d display test");
 			display.setClearColor(Color.darkGray);
 			
-			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), 100, 0.5, 10, 10);
+			int initial_size = 100;
+			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), initial_size, 0.5, WIDTH / 2, 10 + initial_size / 2);
 			
 			while (display.isClosed()) {
 				display.render();
@@ -40,13 +44,13 @@ public class Main {
 			Node node,
 			int size,
 			double size_scale,
-			int prevous_object_right_boundary,
-			int prevous_object_bottom_boundary
+			int center_x,
+			int center_y
 	) {
-		int x1 = prevous_object_right_boundary + 50;
-		int y1 = prevous_object_bottom_boundary + 50;
-		int x2 = x1 + size;
-		int y2 = y1 + size;
+		int x1 = center_x - size / 2;
+		int y1 = center_y - size / 2;
+		int x2 = center_x + size / 2;
+		int y2 = center_y + size / 2;
 		
 		RenderObject render_object;
 		if (node.isDirectory()) {
@@ -58,9 +62,21 @@ public class Main {
 		list.add(render_object);
 		
 		ArrayList<Node> children = node.getChildren();
+		int left_count = 1;
+		int right_count = 0;	// since if i=0, it treats it like a right one, event though i=0 is inherited center
 		for (int i = 0; i < children.size(); i++)
 		{
-			fs_to_render_objects(list, children.get(i), (int)(size * size_scale), size_scale, x2 + i * size, y2);
+			int new_center_x;
+			if (i % 2 == 0) {
+				new_center_x = center_x + right_count * size;
+				right_count++;
+			}
+			else {
+				new_center_x = center_x - left_count * size;
+				left_count++;
+			}
+			
+			fs_to_render_objects(list, children.get(i), (int)(size * size_scale), size_scale, new_center_x, y2 + size);
 		}
 	}
 	
