@@ -3,7 +3,6 @@ package com.zn0w.zfsr3d;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.jar.Manifest;
 
 import com.zn0w.zfsr3d.fs_components.FileTree;
 import com.zn0w.zfsr3d.fs_components.FileTreeGenerator;
@@ -14,8 +13,8 @@ import com.zn0w.zfsr3d.graphics.FileRenderObject;
 import com.zn0w.zfsr3d.graphics.RenderObject;
 import com.zn0w.zfsr3d.input.Key;
 import com.zn0w.zfsr3d.input.KeyboardInput;
-import com.zn0w.zfsr3d.input.MouseButton;
-import com.zn0w.zfsr3d.input.MouseClick;
+import com.zn0w.zfsr3d.input.MouseAction;
+import com.zn0w.zfsr3d.input.MouseActionType;
 import com.zn0w.zfsr3d.input.MouseInput;
 
 public class Main {
@@ -27,7 +26,8 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Hello World! It's Zn0w File System Respresentation 3D");
 		
-		String dirName = "C:\\Users\\blagi\\Desktop\\important";
+		//String dirName = "C:\\Users\\blagi\\Desktop\\important";
+		String dirName = "D:\\work\\projects\\java_workspace\\Zfsr3d";
 		
         try {
 			FileTree fs = FileTreeGenerator.getFSTree(dirName);
@@ -61,11 +61,11 @@ public class Main {
 				display.getCamera().move(dx, dy);
 				
 				// process mouse input
-				for (MouseClick mouse_click : mouse_input.events) {
+				for (MouseAction mouse_action : mouse_input.events) {
 					// focus camera on the clicked location (move camera center to the location)
-					if (mouse_click.button == MouseButton.LEFT) {
-						dx = mouse_click.x - display.getWidth() / 2;
-						dy = mouse_click.y - display.getHeight() / 2;
+					if (mouse_action.type == MouseActionType.LEFT_CLICK) {
+						dx = mouse_action.x - display.getWidth() / 2;
+						dy = mouse_action.y - display.getHeight() / 2;
 						
 						display.getCamera().move(dx, dy);
 					}

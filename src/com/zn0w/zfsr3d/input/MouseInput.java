@@ -2,28 +2,46 @@ package com.zn0w.zfsr3d.input;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
-public class MouseInput implements MouseListener {
+public class MouseInput implements MouseListener, MouseWheelListener {
 
-	public ArrayList<MouseClick> events = new ArrayList<MouseClick>();
+	public ArrayList<MouseAction> events = new ArrayList<MouseAction>();
 	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		MouseClick mouse_click = null;
+		MouseAction mouse_action = null;
 		
 		if (e.getButton() == MouseEvent.BUTTON1)
-			mouse_click = new MouseClick(MouseButton.LEFT, e.getX(), e.getY());
+			mouse_action = new MouseAction(MouseActionType.LEFT_CLICK, e.getX(), e.getY());
 		else if (e.getButton() == MouseEvent.BUTTON2)
-			mouse_click = new MouseClick(MouseButton.MIDDLE, e.getX(), e.getY());
+			mouse_action = new MouseAction(MouseActionType.MIDDLE_CLICK, e.getX(), e.getY());
 		else if (e.getButton() == MouseEvent.BUTTON3)
-			mouse_click = new MouseClick(MouseButton.RIGHT, e.getX(), e.getY());
+			mouse_action = new MouseAction(MouseActionType.RIGHT_CLICK, e.getX(), e.getY());
 		
-		if (mouse_click != null)
-			events.add(mouse_click);
+		if (mouse_action != null)
+			events.add(mouse_action);
 	}
 
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		MouseAction mouse_action = null;
+		
+		double scroll = e.getPreciseWheelRotation();
+		if (scroll > 0.0) {
+			mouse_action = new MouseAction(MouseActionType.SCROLL_DOWN, e.getX(), e.getY(), scroll);
+		}
+		else {
+			mouse_action = new MouseAction(MouseActionType.SCROLL_UP, e.getX(), e.getY(), scroll);
+		}
+		
+		if (mouse_action != null)
+			events.add(mouse_action);
+	}
+	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		

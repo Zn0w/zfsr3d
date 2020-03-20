@@ -3,6 +3,7 @@ package com.zn0w.zfsr3d.graphics;
 public class Camera {
 	
 	int origin_x, origin_y, width, height;
+	float scale = 1.0f;
 	
 	
 	public Camera(int origin_x, int origin_y, int width, int height) {
@@ -38,6 +39,14 @@ public class Camera {
 				object.x2 >= origin_x &&
 				object.y1 <= (origin_y + height) &&
 				object.y2 >= origin_y;
+	}
+	
+	public float getScale() {
+		return scale;
+	}
+	
+	public void setScale(float scale) {
+		this.scale = scale;
 	}
 	
 }
