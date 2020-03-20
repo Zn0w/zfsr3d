@@ -62,6 +62,10 @@ public class Display {
 		return frame.isVisible();
 	}
 	
+	public void close() {
+		frame.dispose();
+	}
+	
 	public void setClearColor(Color color) {
 		clear_color = color;
 	}
@@ -72,6 +76,10 @@ public class Display {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public JFrame getWindowHandle() {
+		return frame;
 	}
 	
 }
