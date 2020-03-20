@@ -3,6 +3,7 @@ package com.zn0w.zfsr3d;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.jar.Manifest;
 
 import com.zn0w.zfsr3d.fs_components.FileTree;
 import com.zn0w.zfsr3d.fs_components.FileTreeGenerator;
@@ -13,11 +14,14 @@ import com.zn0w.zfsr3d.graphics.FileRenderObject;
 import com.zn0w.zfsr3d.graphics.RenderObject;
 import com.zn0w.zfsr3d.input.Key;
 import com.zn0w.zfsr3d.input.KeyboardInput;
+import com.zn0w.zfsr3d.input.MouseButton;
+import com.zn0w.zfsr3d.input.MouseClick;
+import com.zn0w.zfsr3d.input.MouseInput;
 
 public class Main {
 	
 	public static int WIDTH = 1280;
-	public static int CAMERA_SPEED = 5;
+	public static int CAMERA_SPEED = 1;
 	
 	
 	public static void main(String[] args) {
@@ -34,10 +38,15 @@ public class Main {
 			KeyboardInput keyboard_input = new KeyboardInput();
 			display.getWindowHandle().addKeyListener(keyboard_input);
 			
+			MouseInput mouse_input = new MouseInput();
+			display.getWindowHandle().addMouseListener(mouse_input);
+			
 			int initial_size = 100;
 			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), initial_size, 0.75, WIDTH / 2, 10 + initial_size / 2);
 			
+			// TODO add a delta time handling for input
 			while (display.isClosed()) {
+				// process keyboard input
 				int dx = 0, dy = 0;
 				if (keyboard_input.isKeyPressed(Key.ARROW_UP))
 					dy = -CAMERA_SPEED;
@@ -50,6 +59,18 @@ public class Main {
 					dx = CAMERA_SPEED;
 				
 				display.getCamera().move(dx, dy);
+				
+				// process mouse input
+				for (MouseClick mouse_click : mouse_input.events) {
+					// focus camera on the clicked location (move camera center to the location)
+					if (mouse_click.button == MouseButton.LEFT) {
+						dx = mouse_click.x - display.getWidth() / 2;
+						dy = mouse_click.y - display.getHeight() / 2;
+						
+						display.getCamera().move(dx, dy);
+					}
+				}
+				mouse_input.events.clear();
 				
 				display.render();
 			}
