@@ -35,10 +35,10 @@ public class Camera {
 	}
 	
 	public boolean captures(RenderObject object) {
-		return 	object.x1 <= (origin_x + width) &&
-				object.x2 >= origin_x &&
-				object.y1 <= (origin_y + height) &&
-				object.y2 >= origin_y;
+		return 	object.x1 * scale <= (origin_x * scale + width) &&
+				object.x2 * scale >= origin_x * scale &&
+				object.y1 * scale <= (origin_y * scale + height) &&
+				object.y2 * scale >= origin_y * scale;
 	}
 	
 	public double getScale() {

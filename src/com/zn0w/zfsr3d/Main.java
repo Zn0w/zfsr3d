@@ -112,6 +112,8 @@ public class Main {
 		for (int i = 0; i < children.size(); i++)
 		{
 			int x_margin = (int) (size * 1.5);
+			//int x_margin = 50;
+			int y_margin = size;
 			int new_center_x;
 			if (i % 2 == 0) {
 				new_center_x = center_x + right_count * x_margin;
@@ -121,8 +123,9 @@ public class Main {
 				new_center_x = center_x - left_count * x_margin;
 				left_count++;
 			}
+			int new_center_y = center_y + y_margin;
 			
-			fs_to_render_objects(list, children.get(i), (int)(size * size_scale), size_scale, new_center_x, y2 + size);
+			fs_to_render_objects(list, children.get(i), (int)(size * size_scale), size_scale, new_center_x, new_center_y);
 		}
 	}
 	

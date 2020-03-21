@@ -16,12 +16,16 @@ public class KeyboardInput implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		keys[e.getKeyCode() % 37] = true;
+		int key_code = e.getKeyCode();
+		if (key_code >= 37 && key_code <= 40)
+			keys[key_code % 37] = true;
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		keys[e.getKeyCode() % 37] = false;
+		int key_code = e.getKeyCode();
+		if (key_code >= 37 && key_code <= 40)
+			keys[key_code % 37] = false;
 	}
 	
 	public boolean isKeyPressed(Key key) {
