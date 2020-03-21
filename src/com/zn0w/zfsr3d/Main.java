@@ -42,7 +42,7 @@ public class Main {
 			display.getWindowHandle().addMouseWheelListener(mouse_input);
 			
 			int initial_size = 100;
-			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), initial_size, 0.75, display.getWidth() / 2, 10 + initial_size / 2);
+			fs_to_render_objects(display.getRenderObjects(), null, fs.getRoot(), initial_size, 0.75, display.getWidth() / 2, 10 + initial_size / 2);
 			
 			// TODO add a delta time handling for input
 			long last_time = System.currentTimeMillis();
@@ -91,6 +91,7 @@ public class Main {
 	
 	public static void fs_to_render_objects(
 			ArrayList<RenderObject> list,
+			RenderObject parent,
 			Node node,
 			int size,
 			double size_scale,
@@ -104,10 +105,10 @@ public class Main {
 		
 		RenderObject render_object;
 		if (node.isDirectory()) {
-			render_object = new DirectoryRenderObject(x1, y1, x2, y2, node.getComponentName());
+			render_object = new DirectoryRenderObject(x1, y1, x2, y2, node.getComponentName(), parent);
 		}
 		else {
-			render_object = new FileRenderObject(x1, y1, x2, y2, node.getComponentName());
+			render_object = new FileRenderObject(x1, y1, x2, y2, node.getComponentName(), parent);
 		}
 		list.add(render_object);
 		
@@ -130,7 +131,7 @@ public class Main {
 			}
 			int new_center_y = center_y + y_margin;
 			
-			fs_to_render_objects(list, children.get(i), (int)(size * size_scale), size_scale, new_center_x, new_center_y);
+			fs_to_render_objects(list, render_object, children.get(i), (int)(size * size_scale), size_scale, new_center_x, new_center_y);
 		}
 	}
 	
