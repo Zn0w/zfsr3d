@@ -2,11 +2,11 @@ package com.zn0w.zfsr3d.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class KeyboardInput implements KeyListener {
 	
-	// just 4 keys for now (arrows)
-	private boolean[] keys = new boolean[4];
+	ArrayList<Integer> pressed_keys = new ArrayList<Integer>();
 	
 	
 	@Override
@@ -16,19 +16,16 @@ public class KeyboardInput implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		int key_code = e.getKeyCode();
-		if (key_code >= 37 && key_code <= 40)
-			keys[key_code % 37] = true;
+		if (!pressed_keys.contains(e.getKeyCode()))
+			pressed_keys.add(e.getKeyCode());
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		int key_code = e.getKeyCode();
-		if (key_code >= 37 && key_code <= 40)
-			keys[key_code % 37] = false;
+		pressed_keys.remove((Integer)(e.getKeyCode()));
 	}
 	
-	public boolean isKeyPressed(Key key) {
-		return keys[key.value];
+	public boolean isKeyPressed(int keycode) {
+		return pressed_keys.contains(keycode);
 	}
 }

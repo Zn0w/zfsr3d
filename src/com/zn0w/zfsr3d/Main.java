@@ -1,6 +1,7 @@
 package com.zn0w.zfsr3d;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -11,7 +12,6 @@ import com.zn0w.zfsr3d.graphics.DirectoryRenderObject;
 import com.zn0w.zfsr3d.graphics.Display;
 import com.zn0w.zfsr3d.graphics.FileRenderObject;
 import com.zn0w.zfsr3d.graphics.RenderObject;
-import com.zn0w.zfsr3d.input.Key;
 import com.zn0w.zfsr3d.input.KeyboardInput;
 import com.zn0w.zfsr3d.input.MouseAction;
 import com.zn0w.zfsr3d.input.MouseActionType;
@@ -19,8 +19,7 @@ import com.zn0w.zfsr3d.input.MouseInput;
 
 public class Main {
 	
-	public static int WIDTH = 1280;
-	public static int CAMERA_SPEED = 1;
+	public static final int CAMERA_SPEED = 1;
 	
 	
 	public static void main(String[] args) {
@@ -43,21 +42,27 @@ public class Main {
 			display.getWindowHandle().addMouseWheelListener(mouse_input);
 			
 			int initial_size = 100;
-			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), initial_size, 0.75, WIDTH / 2, 10 + initial_size / 2);
+			fs_to_render_objects(display.getRenderObjects(), fs.getRoot(), initial_size, 0.75, display.getWidth() / 2, 10 + initial_size / 2);
 			
 			// TODO add a delta time handling for input
+			long last_time = System.currentTimeMillis();
+			
 			while (display.isClosed()) {
+				long current_time = System.currentTimeMillis();
+				long delta_time = current_time - last_time;
+				last_time = current_time;
+				System.out.println("delta time: " + delta_time + "  FPS: " + (1.0f / (delta_time / 1000.0f)));
+				
 				// process keyboard input
 				int dx = 0, dy = 0;
-				if (keyboard_input.isKeyPressed(Key.ARROW_UP))
-					dy = -CAMERA_SPEED;
-				else if (keyboard_input.isKeyPressed(Key.ARROW_DOWN))
-					dy = CAMERA_SPEED;
-				
-				if (keyboard_input.isKeyPressed(Key.ARROW_LEFT))
-					dx = -CAMERA_SPEED;
-				else if (keyboard_input.isKeyPressed(Key.ARROW_RIGHT))
-					dx = CAMERA_SPEED;
+				if (keyboard_input.isKeyPressed(KeyEvent.VK_UP))
+					dy = (int) (-CAMERA_SPEED * delta_time);
+				else if (keyboard_input.isKeyPressed(KeyEvent.VK_DOWN))
+					dy = (int) (CAMERA_SPEED * delta_time);
+				if (keyboard_input.isKeyPressed(KeyEvent.VK_LEFT))
+					dx = (int) (-CAMERA_SPEED * delta_time);
+				else if (keyboard_input.isKeyPressed(KeyEvent.VK_RIGHT))
+					dx = (int) (CAMERA_SPEED * delta_time);
 				
 				display.getCamera().move(dx, dy);
 				
@@ -111,7 +116,7 @@ public class Main {
 		int right_count = 0;	// since if i=0, it treats it like a right one, event though i=0 is inherited center
 		for (int i = 0; i < children.size(); i++)
 		{
-			int x_margin = (int) (size * 1.5);
+			int x_margin = (int) (size * 3.5);
 			//int x_margin = 50;
 			int y_margin = size;
 			int new_center_x;
