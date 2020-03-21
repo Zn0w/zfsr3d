@@ -11,6 +11,7 @@ import com.zn0w.zfsr3d.fs_components.Node;
 import com.zn0w.zfsr3d.graphics.DirectoryRenderObject;
 import com.zn0w.zfsr3d.graphics.Display;
 import com.zn0w.zfsr3d.graphics.FileRenderObject;
+import com.zn0w.zfsr3d.graphics.GlobalGraphicsSettings;
 import com.zn0w.zfsr3d.graphics.RenderObject;
 import com.zn0w.zfsr3d.input.KeyboardInput;
 import com.zn0w.zfsr3d.input.MouseAction;
@@ -59,10 +60,15 @@ public class Main {
 					dy = (int) (-CAMERA_SPEED * delta_time);
 				else if (keyboard_input.isKeyPressed(KeyEvent.VK_DOWN))
 					dy = (int) (CAMERA_SPEED * delta_time);
+				
 				if (keyboard_input.isKeyPressed(KeyEvent.VK_LEFT))
 					dx = (int) (-CAMERA_SPEED * delta_time);
 				else if (keyboard_input.isKeyPressed(KeyEvent.VK_RIGHT))
 					dx = (int) (CAMERA_SPEED * delta_time);
+				
+				if (keyboard_input.isKeyToggle(KeyEvent.VK_S)) {
+					GlobalGraphicsSettings.SHOW_ALL_NAMES = !GlobalGraphicsSettings.SHOW_ALL_NAMES;
+				}
 				
 				display.getCamera().move(dx, dy);
 				

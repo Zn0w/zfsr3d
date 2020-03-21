@@ -22,8 +22,11 @@ public class FileRenderObject extends RenderObject {
 		
 		g.setColor(Color.blue);
 		g.fillOval(relative_x, relative_y, width, height);
-		g.setColor(Color.RED);
-		g.drawString(name, relative_x, relative_y);
+		
+		if (GlobalGraphicsSettings.SHOW_ALL_NAMES) {
+			g.setColor(Color.RED);
+			g.drawString(name, relative_x, relative_y);
+		}
 		
 		// TODO maybe simpler naming??
 		if (parent != null) {

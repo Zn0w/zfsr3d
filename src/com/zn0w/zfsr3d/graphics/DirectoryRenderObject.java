@@ -22,8 +22,11 @@ public class DirectoryRenderObject extends RenderObject {
 		
 		g.setColor(Color.yellow);
 		g.fillRect(relative_x, relative_y, width, height);
-		g.setColor(Color.RED);
-		g.drawString(name, relative_x, relative_y);
+		
+		if (GlobalGraphicsSettings.SHOW_ALL_NAMES) {
+			g.setColor(Color.RED);
+			g.drawString(name, relative_x, relative_y);
+		}
 		
 		// TODO maybe simpler naming??
 				if (parent != null) {
