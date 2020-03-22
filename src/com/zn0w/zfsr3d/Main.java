@@ -52,7 +52,7 @@ public class Main {
 				long current_time = System.currentTimeMillis();
 				long delta_time = current_time - last_time;
 				last_time = current_time;
-				//System.out.println("delta time: " + delta_time + "  FPS: " + (1.0f / (delta_time / 1000.0f)));
+				System.out.println("delta time: " + delta_time + "  FPS: " + (1.0f / (delta_time / 1000.0f)));
 				
 				// process keyboard input
 				int dx = 0, dy = 0;
@@ -66,7 +66,7 @@ public class Main {
 				else if (keyboard_input.isKeyPressed(KeyEvent.VK_RIGHT))
 					dx = (int) (CAMERA_SPEED * delta_time);
 				
-				if (keyboard_input.isKeyToggle(KeyEvent.VK_S)) {
+				if (keyboard_input.wasKeyStroked(KeyEvent.VK_S)) {
 					GlobalGraphicsSettings.SHOW_ALL_NAMES = !GlobalGraphicsSettings.SHOW_ALL_NAMES;
 				}
 				
@@ -76,7 +76,7 @@ public class Main {
 				for (MouseAction mouse_action : mouse_input.events) {
 					// focus camera on the clicked location (move camera center to the location)
 					if (mouse_action.type == MouseActionType.LEFT_CLICK) {
-						System.out.println(mouse_action.x + "  " + mouse_action.y);
+						//System.out.println(mouse_action.x + "  " + mouse_action.y);
 						for (RenderObject render_object : display.getRenderObjects()) {
 							if (display.getCamera().captures(render_object)) {
 								int offset_x = -display.getCamera().getOriginX();

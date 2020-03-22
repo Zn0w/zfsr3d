@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class KeyboardInput implements KeyListener {
 	
 	ArrayList<Integer> pressed_keys = new ArrayList<Integer>();
-	ArrayList<Integer> typed_keys = new ArrayList<Integer>();
+	ArrayList<Integer> stroked_keys = new ArrayList<Integer>();
 	
 	private final int store_until_flush = 20;
 	
@@ -27,17 +27,17 @@ public class KeyboardInput implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		pressed_keys.remove((Integer)(e.getKeyCode()));
 		
-		if (typed_keys.size() >= store_until_flush)
-			typed_keys.clear();
+		if (stroked_keys.size() >= store_until_flush)
+			stroked_keys.clear();
 		
-		typed_keys.add(e.getKeyCode());
+		stroked_keys.add(e.getKeyCode());
 	}
 	
 	public boolean isKeyPressed(int keycode) {
 		return pressed_keys.contains(keycode);
 	}
 	
-	public boolean isKeyToggle(int keycode) {
-		return typed_keys.remove((Integer)keycode);
+	public boolean wasKeyStroked(int keycode) {
+		return stroked_keys.remove((Integer)keycode);
 	}
 }
