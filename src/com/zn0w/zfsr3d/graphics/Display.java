@@ -1,6 +1,7 @@
 package com.zn0w.zfsr3d.graphics;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -32,13 +33,14 @@ public class Display {
         g = (Graphics2D) image.getGraphics();
 		
         panel = new JPanel();
+        panel.setPreferredSize(new Dimension(width, height));
         
 		frame = new JFrame();
 		frame.setTitle(title);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setSize(width, height);
-		frame.setLocationRelativeTo(null);
 		frame.setContentPane(panel);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
 		camera = new Camera(0, 0, width, height);
@@ -50,6 +52,11 @@ public class Display {
 		g.fillRect(0, 0, width, height);
 		
 		for (RenderObject render_object : render_objects) {
+			if (render_object.parent != null && render_object.parent.hide_children) {
+				render_object.hide_children = true;
+				continue;
+			}
+			
 			if (camera.captures(render_object)) {
 				render_object.draw(g, -camera.origin_x, -camera.origin_y, camera.scale);
 			}

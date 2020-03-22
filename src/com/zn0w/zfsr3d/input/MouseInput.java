@@ -10,17 +10,20 @@ public class MouseInput implements MouseListener, MouseWheelListener {
 
 	public ArrayList<MouseAction> events = new ArrayList<MouseAction>();
 	
+	private final int frame_edge_x_offset = 8;
+	private final int title_bar_y_offset = 30;
+	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		MouseAction mouse_action = null;
 		
 		if (e.getButton() == MouseEvent.BUTTON1)
-			mouse_action = new MouseAction(MouseActionType.LEFT_CLICK, e.getX(), e.getY());
+			mouse_action = new MouseAction(MouseActionType.LEFT_CLICK, e.getX() - frame_edge_x_offset, e.getY() - title_bar_y_offset);
 		else if (e.getButton() == MouseEvent.BUTTON2)
-			mouse_action = new MouseAction(MouseActionType.MIDDLE_CLICK, e.getX(), e.getY());
+			mouse_action = new MouseAction(MouseActionType.MIDDLE_CLICK, e.getX() - frame_edge_x_offset, e.getY() - title_bar_y_offset);
 		else if (e.getButton() == MouseEvent.BUTTON3)
-			mouse_action = new MouseAction(MouseActionType.RIGHT_CLICK, e.getX(), e.getY());
+			mouse_action = new MouseAction(MouseActionType.RIGHT_CLICK, e.getX() - frame_edge_x_offset, e.getY() - title_bar_y_offset);
 		
 		if (mouse_action != null)
 			events.add(mouse_action);

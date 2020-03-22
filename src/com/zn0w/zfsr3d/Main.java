@@ -52,7 +52,7 @@ public class Main {
 				long current_time = System.currentTimeMillis();
 				long delta_time = current_time - last_time;
 				last_time = current_time;
-				System.out.println("delta time: " + delta_time + "  FPS: " + (1.0f / (delta_time / 1000.0f)));
+				//System.out.println("delta time: " + delta_time + "  FPS: " + (1.0f / (delta_time / 1000.0f)));
 				
 				// process keyboard input
 				int dx = 0, dy = 0;
@@ -76,10 +76,27 @@ public class Main {
 				for (MouseAction mouse_action : mouse_input.events) {
 					// focus camera on the clicked location (move camera center to the location)
 					if (mouse_action.type == MouseActionType.LEFT_CLICK) {
-						dx = mouse_action.x - display.getWidth() / 2;
-						dy = mouse_action.y - display.getHeight() / 2;
-						
-						display.getCamera().move(dx, dy);
+						System.out.println(mouse_action.x + "  " + mouse_action.y);
+						for (RenderObject render_object : display.getRenderObjects()) {
+							if (display.getCamera().captures(render_object)) {
+								int offset_x = -display.getCamera().getOriginX();
+								int offset_y = -display.getCamera().getOriginY();
+								double scale = display.getCamera().getScale();
+								
+								int relative_x = (int) ((render_object.x1 + offset_x) * scale);
+								int relative_y = (int) ((render_object.y1 + offset_y) * scale);
+								int width = (int) ((render_object.x2 - render_object.x1) * scale);
+								int height = (int) ((render_object.y2 - render_object.y1) * scale);
+								
+								if (
+										relative_x <= mouse_action.x && relative_x + width >= mouse_action.x &&
+										relative_y <= mouse_action.y && relative_y + height >= mouse_action.y
+									) {
+									render_object.hide_children = !render_object.hide_children;
+									break;
+								}
+							}
+						}
 					}
 					else if (mouse_action.type == MouseActionType.SCROLL_UP ||
 							mouse_action.type == MouseActionType.SCROLL_DOWN) {

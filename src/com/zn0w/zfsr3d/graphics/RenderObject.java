@@ -8,7 +8,7 @@ public abstract class RenderObject {
 	public int x1, y1, x2, y2;
 	public String name;
 	public RenderObject parent;
-	public boolean hide_children;
+	public boolean hide_children = false;	// TODO maybe change to true by default??
 	
 	
 	public RenderObject(int x1, int y1, int x2, int y2, String name) {
