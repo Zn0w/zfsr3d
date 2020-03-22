@@ -35,10 +35,10 @@ public class MouseInput implements MouseListener, MouseWheelListener {
 		
 		double scroll = e.getPreciseWheelRotation();
 		if (scroll > 0.0) {
-			mouse_action = new MouseAction(MouseActionType.SCROLL_DOWN, e.getX(), e.getY(), scroll);
+			mouse_action = new MouseAction(MouseActionType.SCROLL_DOWN, e.getX() - frame_edge_x_offset, e.getY() - title_bar_y_offset, scroll);
 		}
 		else {
-			mouse_action = new MouseAction(MouseActionType.SCROLL_UP, e.getX(), e.getY(), scroll);
+			mouse_action = new MouseAction(MouseActionType.SCROLL_UP, e.getX() - frame_edge_x_offset, e.getY() - title_bar_y_offset, scroll);
 		}
 		
 		if (mouse_action != null)
