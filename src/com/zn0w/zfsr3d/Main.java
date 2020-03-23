@@ -33,6 +33,7 @@ public class Main {
 	private static ViewMode view_mode = ViewMode.TREEVIEW;
 	private static ArrayList<RenderObject> computed_treeview = new ArrayList<RenderObject>();
 	private static HashMap<Node, ArrayList<RenderObject>> computed_dynamic2d_view = new HashMap<Node, ArrayList<RenderObject>>();
+	private static Node current_node;
 	
 	
 	public static void main(String[] args) {
@@ -94,6 +95,15 @@ public class Main {
 			
 			display.getCamera().move(dx, dy);
 		}
+		else if (view_mode == ViewMode.DYNAMIC_2D_VIEW) {
+			int dx = 0;
+			if (keyboard_input.isKeyPressed(KeyEvent.VK_LEFT))
+				dx = (int) (-CAMERA_SPEED * delta_time);
+			else if (keyboard_input.isKeyPressed(KeyEvent.VK_RIGHT))
+				dx = (int) (CAMERA_SPEED * delta_time);
+			
+			display.getCamera().move(dx, 0);
+		}
 		
 		if (keyboard_input.wasKeyStroked(KeyEvent.VK_S)) {
 			GlobalGraphicsSettings.SHOW_ALL_NAMES = !GlobalGraphicsSettings.SHOW_ALL_NAMES;
@@ -104,7 +114,18 @@ public class Main {
 		}
 		if (keyboard_input.wasKeyStroked(KeyEvent.VK_D)) {
 			view_mode = ViewMode.DYNAMIC_2D_VIEW;
-			display.setRenderObjects(computed_dynamic2d_view.get(fs.getRoot()));
+			
+			if (current_node == null || !computed_dynamic2d_view.containsKey(current_node)) {
+				current_node = fs.getRoot();
+				ArrayList<RenderObject> render_objects =
+						FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
+								current_node, display.getWidth(), display.getHeight()
+								);
+				computed_dynamic2d_view.put(current_node, render_objects);
+				
+			}
+			
+			display.setRenderObjects(computed_dynamic2d_view.get(current_node));
 		}
 	}
 	
@@ -128,8 +149,27 @@ public class Main {
 								relative_x <= mouse_action.x && relative_x + width >= mouse_action.x &&
 								relative_y <= mouse_action.y && relative_y + height >= mouse_action.y
 							) {
-							render_object.hide_children = !render_object.hide_children;
-							break;
+							if (view_mode == ViewMode.TREEVIEW) {
+								render_object.hide_children = !render_object.hide_children;
+								break;
+							}
+							else if (view_mode == ViewMode.DYNAMIC_2D_VIEW) {
+								for (Node child : current_node.getChildren()) {
+									if (child.getComponentName() == render_object.name) {
+										current_node = child;
+										
+										if (!computed_dynamic2d_view.containsKey(current_node)) {
+											ArrayList<RenderObject> render_objects =
+													FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
+															current_node, display.getWidth(), display.getHeight()
+															);
+											computed_dynamic2d_view.put(current_node, render_objects);
+										}
+										
+										display.setRenderObjects(computed_dynamic2d_view.get(current_node));
+									}
+								}
+							}
 						}
 					}
 				}
@@ -137,6 +177,22 @@ public class Main {
 			else if (mouse_action.type == MouseActionType.SCROLL_UP ||
 					mouse_action.type == MouseActionType.SCROLL_DOWN) {
 				display.getCamera().adjustScale(mouse_action.scroll / 10.0);
+			}
+			else if (mouse_action.type == MouseActionType.RIGHT_CLICK) {
+				if (view_mode == ViewMode.DYNAMIC_2D_VIEW) {
+					if (current_node.getParent() != null) {
+						current_node = current_node.getParent();
+						if (!computed_dynamic2d_view.containsKey(current_node)) {
+							ArrayList<RenderObject> render_objects =
+									FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
+											current_node, display.getWidth(), display.getHeight()
+											);
+							computed_dynamic2d_view.put(current_node, render_objects);
+						}
+						
+						display.setRenderObjects(computed_dynamic2d_view.get(current_node));
+					}
+				}
 			}
 		}
 		mouse_input.events.clear();
