@@ -71,6 +71,10 @@ public class Display {
 		return render_objects;
 	}
 	
+	public void setRenderObjects(ArrayList<RenderObject> render_objects) {
+		this.render_objects = render_objects;
+	}
+	
 	public boolean isClosed() {
 		return frame.isVisible();
 	}
