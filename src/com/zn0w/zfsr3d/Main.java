@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.zn0w.zfsr3d.fs_components.FileTree;
 import com.zn0w.zfsr3d.fs_components.FileTreeGenerator;
+import com.zn0w.zfsr3d.fs_components.Node;
 import com.zn0w.zfsr3d.graphics.Display;
 import com.zn0w.zfsr3d.graphics.GlobalGraphicsSettings;
 import com.zn0w.zfsr3d.graphics.RenderObject;
@@ -17,9 +19,20 @@ import com.zn0w.zfsr3d.input.MouseInput;
 
 public class Main {
 	
-	public static final int CAMERA_SPEED = 1;
+	private static FileTree fs;
+	private static Display display;
+	private static KeyboardInput keyboard_input;
+	private static MouseInput mouse_input;
 	
-	public static ArrayList<RenderObject> computed_treeview = new ArrayList<RenderObject>();
+	private static final int CAMERA_SPEED = 1;
+	
+	private enum ViewMode {
+		TREEVIEW, DYNAMIC_2D_VIEW
+	};
+	
+	private static ViewMode view_mode = ViewMode.TREEVIEW;
+	private static ArrayList<RenderObject> computed_treeview = new ArrayList<RenderObject>();
+	private static HashMap<Node, ArrayList<RenderObject>> computed_dynamic2d_view = new HashMap<Node, ArrayList<RenderObject>>();
 	
 	
 	public static void main(String[] args) {
@@ -29,15 +42,15 @@ public class Main {
 		String dirName = "D:\\work\\projects\\java_workspace\\Zfsr3d";
 		
         try {
-			FileTree fs = FileTreeGenerator.getFSTree(dirName);
+			fs = FileTreeGenerator.getFSTree(dirName);
 			
-			Display display = new Display(1280, 720, "zfsr3d display test");
+			display = new Display(1280, 720, "zfsr3d display test");
 			display.setClearColor(Color.darkGray);
 			
-			KeyboardInput keyboard_input = new KeyboardInput();
+			keyboard_input = new KeyboardInput();
 			display.getWindowHandle().addKeyListener(keyboard_input);
 			
-			MouseInput mouse_input = new MouseInput();
+			mouse_input = new MouseInput();
 			display.getWindowHandle().addMouseListener(mouse_input);
 			display.getWindowHandle().addMouseWheelListener(mouse_input);
 			
@@ -56,8 +69,8 @@ public class Main {
 				last_time = current_time;
 				System.out.println("delta time: " + delta_time + "  FPS: " + (1.0f / (delta_time / 1000.0f)));
 				
-				process_keyboard_input(keyboard_input, display, delta_time);
-				process_mouse_input(mouse_input, display, delta_time);
+				process_keyboard_input(delta_time);
+				process_mouse_input(delta_time);
 				
 				display.render();
 			}
@@ -66,26 +79,36 @@ public class Main {
 		}
 	}
 	
-	public static void process_keyboard_input(KeyboardInput keyboard_input, Display display, long delta_time) {
-		int dx = 0, dy = 0;
-		if (keyboard_input.isKeyPressed(KeyEvent.VK_UP))
-			dy = (int) (-CAMERA_SPEED * delta_time);
-		else if (keyboard_input.isKeyPressed(KeyEvent.VK_DOWN))
-			dy = (int) (CAMERA_SPEED * delta_time);
-		
-		if (keyboard_input.isKeyPressed(KeyEvent.VK_LEFT))
-			dx = (int) (-CAMERA_SPEED * delta_time);
-		else if (keyboard_input.isKeyPressed(KeyEvent.VK_RIGHT))
-			dx = (int) (CAMERA_SPEED * delta_time);
+	public static void process_keyboard_input(long delta_time) {
+		if (view_mode == ViewMode.TREEVIEW) {
+			int dx = 0, dy = 0;
+			if (keyboard_input.isKeyPressed(KeyEvent.VK_UP))
+				dy = (int) (-CAMERA_SPEED * delta_time);
+			else if (keyboard_input.isKeyPressed(KeyEvent.VK_DOWN))
+				dy = (int) (CAMERA_SPEED * delta_time);
+			
+			if (keyboard_input.isKeyPressed(KeyEvent.VK_LEFT))
+				dx = (int) (-CAMERA_SPEED * delta_time);
+			else if (keyboard_input.isKeyPressed(KeyEvent.VK_RIGHT))
+				dx = (int) (CAMERA_SPEED * delta_time);
+			
+			display.getCamera().move(dx, dy);
+		}
 		
 		if (keyboard_input.wasKeyStroked(KeyEvent.VK_S)) {
 			GlobalGraphicsSettings.SHOW_ALL_NAMES = !GlobalGraphicsSettings.SHOW_ALL_NAMES;
 		}
-		
-		display.getCamera().move(dx, dy);
+		if (keyboard_input.wasKeyStroked(KeyEvent.VK_T)) {
+			view_mode = ViewMode.TREEVIEW;
+			display.setRenderObjects(computed_treeview);
+		}
+		if (keyboard_input.wasKeyStroked(KeyEvent.VK_D)) {
+			view_mode = ViewMode.DYNAMIC_2D_VIEW;
+			display.setRenderObjects(computed_dynamic2d_view.get(fs.getRoot()));
+		}
 	}
 	
-	public static void process_mouse_input(MouseInput mouse_input, Display display, long delta_time) {
+	public static void process_mouse_input(long delta_time) {
 		for (MouseAction mouse_action : mouse_input.events) {
 			// focus camera on the clicked location (move camera center to the location)
 			if (mouse_action.type == MouseActionType.LEFT_CLICK) {
