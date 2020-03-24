@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.zn0w.zfsr3d.math.Matrix;
+import com.zn0w.zfsr3d.math.Point;
+
 public class Display {
 	
 	private JFrame frame;
@@ -61,6 +64,49 @@ public class Display {
 				render_object.draw(g, -camera.origin_x, -camera.origin_y, camera.scale);
 			}
 		}
+		
+		// 3D PROJECTION TEST
+		
+		/*int points[][] = {{100, 100}, {200, 100}, {200, 200}, {100, 200}};
+		int z = -2;
+		g.drawLine(points[0][0] / (-z), points[0][1] / (-z), points[1][0] / (-z), points[1][1] / (-z));
+		g.drawLine(points[1][0] / (-z), points[1][1] / (-z), points[2][0] / (-z), points[2][1] / (-z));
+		g.drawLine(points[2][0] / (-z), points[2][1] / (-z), points[3][0] / (-z), points[3][1] / (-z));
+		g.drawLine(points[3][0] / (-z), points[3][1] / (-z), points[0][0] / (-z), points[0][1] / (-z));*/
+		
+		Point[] points = {
+				new Point(new int[] {100, 100, -2, 1}),
+				new Point(new int[] {200, 100, -2, 1}),
+				new Point(new int[] {200, 200, -2, 1}),
+				new Point(new int[] {100, 200, -2, 1})
+		};
+		
+		Matrix matrix = new Matrix(new int[][] {
+			{1, 0, 0, 0},
+			{0, 1, 0, 0},
+			{0, 0, -1, 0},
+			{0, 0, -1, 0}
+		});
+		
+		Point[] new_points = new Point[4];
+		
+		for (int i = 0; i < 4; i++) {
+			new_points[i] = points[i].multiply(matrix);
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			new_points[i].values[0] /= new_points[i].values[3];
+			new_points[i].values[1] /= new_points[i].values[3];
+			new_points[i].values[2] /= new_points[i].values[3];
+			new_points[i].values[3] /= new_points[i].values[3];
+		}
+		
+		g.drawLine(new_points[0].values[0], new_points[0].values[1], new_points[1].values[0], new_points[1].values[1]);
+		g.drawLine(new_points[1].values[0], new_points[1].values[1], new_points[2].values[0], new_points[2].values[1]);
+		g.drawLine(new_points[2].values[0], new_points[2].values[1], new_points[3].values[0], new_points[3].values[1]);
+		g.drawLine(new_points[3].values[0], new_points[3].values[1], new_points[0].values[0], new_points[0].values[1]);
+		
+		// 3D PROJECTION TEST
 		
 		Graphics g2 = panel.getGraphics();
         g2.drawImage(image, 0, 0, null);
