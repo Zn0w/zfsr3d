@@ -33,7 +33,7 @@ public class Main {
 	private static ViewMode view_mode = ViewMode.TREEVIEW;
 	private static ArrayList<RenderObject> computed_treeview = new ArrayList<RenderObject>();
 	private static HashMap<Node, ArrayList<RenderObject>> computed_dynamic2d_view = new HashMap<Node, ArrayList<RenderObject>>();
-	private static Node current_node;
+	private static Node current_node;	// current_node is used while in one of the dynamic view modes
 	
 	
 	public static void main(String[] args) {
@@ -59,6 +59,8 @@ public class Main {
 			// by default the view is treeview
 			FileTreeToRenderObjectsTranslator.translate_to_treeview(computed_treeview, null, fs.getRoot(), initial_size, 0.75, display.getWidth() / 2, 10 + initial_size / 2);
 			display.setRenderObjects(computed_treeview);
+			
+			current_node = fs.getRoot();
 			
 			
 			// TODO add a delta time handling for input
@@ -110,25 +112,11 @@ public class Main {
 		}
 		if (keyboard_input.wasKeyStroked(KeyEvent.VK_T)) {
 			view_mode = ViewMode.TREEVIEW;
-			display.setRenderObjects(computed_treeview);
+			set_up_treeview_scene();
 		}
 		if (keyboard_input.wasKeyStroked(KeyEvent.VK_D)) {
 			view_mode = ViewMode.DYNAMIC_2D_VIEW;
-			
-			if (current_node == null || !computed_dynamic2d_view.containsKey(current_node)) {
-				current_node = fs.getRoot();
-				ArrayList<RenderObject> render_objects =
-						FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
-								current_node, display.getWidth(), display.getHeight()
-								);
-				computed_dynamic2d_view.put(current_node, render_objects);
-				
-			}
-			
-			display.setRenderObjects(computed_dynamic2d_view.get(current_node));
-			
-			// center the camera
-			display.getCamera().move(-display.getCamera().getOriginX(), -display.getCamera().getOriginY());
+			set_up_dynamic2d_view_scene();
 		}
 	}
 	
@@ -160,20 +148,7 @@ public class Main {
 								for (Node child : current_node.getChildren()) {
 									if (child.getComponentName() == render_object.name) {
 										current_node = child;
-										
-										if (!computed_dynamic2d_view.containsKey(current_node)) {
-											ArrayList<RenderObject> render_objects =
-													FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
-															current_node, display.getWidth(), display.getHeight()
-															);
-											computed_dynamic2d_view.put(current_node, render_objects);
-										}
-										
-										display.setRenderObjects(computed_dynamic2d_view.get(current_node));
-										
-										// center the camera
-										display.getCamera().move(-display.getCamera().getOriginX(), -display.getCamera().getOriginY());
-										
+										set_up_dynamic2d_view_scene();
 										break;
 									}
 								}
@@ -190,18 +165,7 @@ public class Main {
 				if (view_mode == ViewMode.DYNAMIC_2D_VIEW) {
 					if (current_node.getParent() != null) {
 						current_node = current_node.getParent();
-						if (!computed_dynamic2d_view.containsKey(current_node)) {
-							ArrayList<RenderObject> render_objects =
-									FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
-											current_node, display.getWidth(), display.getHeight()
-											);
-							computed_dynamic2d_view.put(current_node, render_objects);
-						}
-						
-						display.setRenderObjects(computed_dynamic2d_view.get(current_node));
-						
-						// center the camera
-						display.getCamera().move(-display.getCamera().getOriginX(), -display.getCamera().getOriginY());
+						set_up_dynamic2d_view_scene();
 					}
 				}
 			}
@@ -209,4 +173,27 @@ public class Main {
 		mouse_input.events.clear();
 	}
 	
+	private static void center_camera() {
+		display.getCamera().move(-display.getCamera().getOriginX(), -display.getCamera().getOriginY());
+	}
+	
+	private static void set_up_treeview_scene() {
+		display.setRenderObjects(computed_treeview);
+		center_camera();
+	}
+	
+	private static void set_up_dynamic2d_view_scene() {
+		if (!computed_dynamic2d_view.containsKey(current_node)) {
+			ArrayList<RenderObject> render_objects =
+					FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
+							current_node, display.getWidth(), display.getHeight()
+							);
+			computed_dynamic2d_view.put(current_node, render_objects);
+		}
+		
+		display.setRenderObjects(computed_dynamic2d_view.get(current_node));
+		
+		center_camera();
+	}
+		
 }
