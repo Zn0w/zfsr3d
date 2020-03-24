@@ -126,6 +126,9 @@ public class Main {
 			}
 			
 			display.setRenderObjects(computed_dynamic2d_view.get(current_node));
+			
+			// center the camera
+			display.getCamera().move(-display.getCamera().getOriginX(), -display.getCamera().getOriginY());
 		}
 	}
 	
@@ -167,6 +170,11 @@ public class Main {
 										}
 										
 										display.setRenderObjects(computed_dynamic2d_view.get(current_node));
+										
+										// center the camera
+										display.getCamera().move(-display.getCamera().getOriginX(), -display.getCamera().getOriginY());
+										
+										break;
 									}
 								}
 							}
@@ -191,6 +199,9 @@ public class Main {
 						}
 						
 						display.setRenderObjects(computed_dynamic2d_view.get(current_node));
+						
+						// center the camera
+						display.getCamera().move(-display.getCamera().getOriginX(), -display.getCamera().getOriginY());
 					}
 				}
 			}
