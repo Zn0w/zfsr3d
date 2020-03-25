@@ -2,14 +2,14 @@ package com.zn0w.zfsr3d.math;
 
 public class Point {
 	
-	public int values[];
+	public double values[];
 	
 	
 	public Point(int size) {
-		values = new int[size];
+		values = new double[size];
 	}
 	
-	public Point(int[] values) {
+	public Point(double[] values) {
 		this.values = values;
 	}
 	
