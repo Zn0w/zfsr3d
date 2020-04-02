@@ -160,9 +160,9 @@ public class Display {
 		// test orthographic projection matrix
 		Vector points[] = {
 				new Vector(new double[] {0.5, 0.5, 0}),
-				new Vector(new double[] {1, 0.5, 0}),
-				new Vector(new double[] {1, 1, 0}),
-				new Vector(new double[] {0.5, 1, 0})
+				new Vector(new double[] {-0.5, 0.5, 0}),
+				new Vector(new double[] {-0.5, -0.5, 0}),
+				new Vector(new double[] {0.5, -0.5, 0})
 		};
 		
 		Matrix projection_matrix = new Matrix(new double[][] {
@@ -170,7 +170,8 @@ public class Display {
 			{0, 1, 0}
 		});
 		
-		double angle = Math.PI / 6;
+		//double angle = Math.PI / 6;
+		double angle = System.currentTimeMillis() / 100;
 		Matrix rotation_matrix_x = new Matrix(new double[][] {
 			{Math.cos(angle), -Math.sin(angle)},
 			{Math.sin(angle), Math.cos(angle)}
