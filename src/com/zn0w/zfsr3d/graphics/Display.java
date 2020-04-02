@@ -68,101 +68,16 @@ public class Display {
 		
 		// 3D PROJECTION TEST
 		
-		/*int points[][] = {{100, 100}, {200, 100}, {200, 200}, {100, 200}};
-		int z = -2;
-		g.drawLine(points[0][0] / (-z), points[0][1] / (-z), points[1][0] / (-z), points[1][1] / (-z));
-		g.drawLine(points[1][0] / (-z), points[1][1] / (-z), points[2][0] / (-z), points[2][1] / (-z));
-		g.drawLine(points[2][0] / (-z), points[2][1] / (-z), points[3][0] / (-z), points[3][1] / (-z));
-		g.drawLine(points[3][0] / (-z), points[3][1] / (-z), points[0][0] / (-z), points[0][1] / (-z));*/
-		
-		/*double near = 0.1;
-		double far = 1000.0;
-		double fov = Math.PI / 2;
-		double aspect_ratio = width / height;
-		
-		Point[] points = {
-				new Point(new double[] {10, 10, 1, 1}),
-				new Point(new double[] {20, 10, 1, 1}),
-				new Point(new double[] {20, 20, 1, 1}),
-				new Point(new double[] {10, 20, 1, 1}),
-				new Point(new double[] {10, 10, 11, 1}),
-				new Point(new double[] {20, 10, 11, 1}),
-				new Point(new double[] {20, 20, 11, 1}),
-				new Point(new double[] {10, 20, 11, 1})
-		};
-		
-		double angle = Math.PI;
-		
-		Matrix rotation_matrix_x = new Matrix(new double[][] {
-			{1, 0, 0, 0},
-			{0, Math.cos(angle), Math.sin(angle), 0},
-			{0, -Math.sin(angle), Math.cos(angle), 0},
-			{0, 0, 0, 1},
-		});
-		
-		Matrix rotation_matrix_y = new Matrix(new double[][] {
-			{(int)Math.cos(angle), 0, -Math.sin(angle), 0},
-			{0, 1, 0, 0},
-			{(int)Math.sin(angle), 0, Math.cos(angle), 0},
-			{0, 0, 0, 1},
-		});
-		
-		Matrix rotation_matrix_z = new Matrix(new double[][] {
-			{Math.cos(angle), Math.sin(angle), 0, 0},
-			{-Math.sin(angle), Math.cos(angle), 0, 0},
-			{0, 0, 1, 0},
-			{0, 0, 0, 1},
-		});
-		
-		Matrix projection_matrix = new Matrix(new double[][] {
-			{aspect_ratio * fov, 0, 0, 0},
-			{0, fov, 0, 0},
-			{0, 0, far / (far - near), 1},
-			{0, 0, (-far * near) / (far - near), 0}
-		});
-		
-		// translate points z coordinate (test)
-		points[0].values[2] -= 2.5;
-		points[1].values[2] -= 2.5;
-		points[2].values[2] -= 2.5;
-		points[3].values[2] -= 2.5;
-		
-		points[4].values[2] -= 2.5;
-		points[5].values[2] -= 2.5;
-		points[6].values[2] -= 2.5;
-		points[7].values[2] -= 2.5;
-		
-		Point[] result_points = new Point[8];
-		
-		for (int i = 0; i < 8; i++) {
-			points[i] = points[i].multiply(rotation_matrix_z);
-		}
-		
-		for (int i = 0; i < 8; i++) {
-			//points[i] = points[i].multiply(rotation_matrix_x);
-		}
-		
-		for (int i = 0; i < 8; i++) {
-			result_points[i] = points[i].multiply(projection_matrix);
-		}
-		
-		for (int i = 0; i < 8; i++) {
-			if (result_points[i].values[3] != 0) {
-				result_points[i].values[0] /= result_points[i].values[3];
-				result_points[i].values[1] /= result_points[i].values[3];
-				result_points[i].values[2] /= result_points[i].values[3];
-				result_points[i].values[3] /= result_points[i].values[3];
-			}
-		}
-		
-		draw_cube(result_points, g);*/
-		
 		// test orthographic projection matrix
 		Vector points[] = {
-				new Vector(new double[] {0.5, 0.5, 0}),
-				new Vector(new double[] {-0.5, 0.5, 0}),
-				new Vector(new double[] {-0.5, -0.5, 0}),
-				new Vector(new double[] {0.5, -0.5, 0})
+				new Vector(new double[] {0.5, 0.5, 0.5}),
+				new Vector(new double[] {-0.5, 0.5, 0.5}),
+				new Vector(new double[] {-0.5, -0.5, 0.5}),
+				new Vector(new double[] {0.5, -0.5, 0.5}),
+				new Vector(new double[] {0.5, 0.5, -0.5}),
+				new Vector(new double[] {-0.5, 0.5, -0.5}),
+				new Vector(new double[] {-0.5, -0.5, -0.5}),
+				new Vector(new double[] {0.5, -0.5, -0.5})
 		};
 		
 		Matrix projection_matrix = new Matrix(new double[][] {
@@ -171,28 +86,60 @@ public class Display {
 		});
 		
 		//double angle = Math.PI / 6;
-		double angle = System.currentTimeMillis() / 100;
+		double angle = System.currentTimeMillis() / 10 * Math.PI / 72;
+		
 		Matrix rotation_matrix_x = new Matrix(new double[][] {
-			{Math.cos(angle), -Math.sin(angle)},
-			{Math.sin(angle), Math.cos(angle)}
+			{1, 0, 0},
+			{0, Math.cos(angle), -Math.sin(angle)},
+			{0, Math.sin(angle), Math.cos(angle)}
 		});
 		
+		Matrix rotation_matrix_y = new Matrix(new double[][] {
+			{Math.cos(angle), 0, Math.sin(angle)},
+			{0, 1, 0},
+			{-Math.sin(angle), 0, Math.cos(angle)}
+		});
+		
+		Matrix rotation_matrix_z = new Matrix(new double[][] {
+			{Math.cos(angle), -Math.sin(angle), 0},
+			{Math.sin(angle), Math.cos(angle), 0},
+			{0, 0, 1}
+		});
+		
+		// scale points
 		for (Vector point : points)
 			for (int i = 0; i < 3; i++)
 				point.values[i] *= 200;
 		
-		Vector result_points[] = new Vector[4];
+		// apply rotation matrix
+		for (int i = 0; i < 8; i++) {
+			points[i] = MatOp.matrixToVector(MatOp.multiply(rotation_matrix_x, points[i]));
+			points[i] = MatOp.matrixToVector(MatOp.multiply(rotation_matrix_y, points[i]));
+			points[i] = MatOp.matrixToVector(MatOp.multiply(rotation_matrix_z, points[i]));
+		}
 		
-		for (int i = 0; i < 4; i++)
+		Vector result_points[] = new Vector[8];
+		// get projected points
+		for (int i = 0; i < 8; i++)
 			result_points[i] = MatOp.matrixToVector(MatOp.multiply(projection_matrix, points[i]));
 		
-		for (int i = 0; i < 4; i++)
-			result_points[i] = MatOp.matrixToVector(MatOp.multiply(rotation_matrix_x, result_points[i]));
+		// render resulting points
+		g.setColor(Color.GREEN);
+		for (int i = 0; i < 8; i++)
+			draw_point(g, (int)(width / 2 - result_points[i].values[0]), (int)(height / 2 - result_points[i].values[1]), 8);
 		
-		draw_point(g, (int)(width / 2 - result_points[0].values[0]), (int)(height / 2 - result_points[0].values[1]), 8);
-		draw_point(g, (int)(width / 2 - result_points[1].values[0]), (int)(height / 2 - result_points[1].values[1]), 8);
-		draw_point(g, (int)(width / 2 - result_points[2].values[0]), (int)(height / 2 - result_points[2].values[1]), 8);
-		draw_point(g, (int)(width / 2 - result_points[3].values[0]), (int)(height / 2 - result_points[3].values[1]), 8);
+		draw_edge(g, 0, 1, result_points);
+		draw_edge(g, 1, 2, result_points);
+		draw_edge(g, 2, 3, result_points);
+		draw_edge(g, 3, 0, result_points);
+		draw_edge(g, 0, 4, result_points);
+		draw_edge(g, 1, 5, result_points);
+		draw_edge(g, 2, 6, result_points);
+		draw_edge(g, 3, 7, result_points);
+		draw_edge(g, 4, 5, result_points);
+		draw_edge(g, 5, 6, result_points);
+		draw_edge(g, 6, 7, result_points);
+		draw_edge(g, 7, 4, result_points);
 		
 		// 3D PROJECTION TEST
 		
@@ -201,25 +148,13 @@ public class Display {
         g2.dispose();
 	}
 	
-	private static void draw_point(Graphics g, int x, int y, int r) {
+	private void draw_point(Graphics g, int x, int y, int r) {
 		g.fillOval(x - r / 2, y - r / 2, r, r);
 	}
 	
-	private static void draw_cube(Vector[] points, Graphics g) {
-		g.drawLine((int)points[0].values[0], (int)points[0].values[1], (int)points[1].values[0], (int)points[1].values[1]);
-		g.drawLine((int)points[1].values[0], (int)points[1].values[1], (int)points[2].values[0], (int)points[2].values[1]);
-		g.drawLine((int)points[2].values[0], (int)points[2].values[1], (int)points[3].values[0], (int)points[3].values[1]);
-		g.drawLine((int)points[3].values[0], (int)points[3].values[1], (int)points[0].values[0], (int)points[0].values[1]);
-		
-		g.drawLine((int)points[4].values[0], (int)points[4].values[1], (int)points[5].values[0], (int)points[5].values[1]);
-		g.drawLine((int)points[5].values[0], (int)points[5].values[1], (int)points[6].values[0], (int)points[6].values[1]);
-		g.drawLine((int)points[6].values[0], (int)points[6].values[1], (int)points[7].values[0], (int)points[7].values[1]);
-		g.drawLine((int)points[7].values[0], (int)points[7].values[1], (int)points[4].values[0], (int)points[4].values[1]);
-		
-		g.drawLine((int)points[0].values[0], (int)points[0].values[1], (int)points[4].values[0], (int)points[4].values[1]);
-		g.drawLine((int)points[1].values[0], (int)points[1].values[1], (int)points[5].values[0], (int)points[5].values[1]);
-		g.drawLine((int)points[2].values[0], (int)points[2].values[1], (int)points[6].values[0], (int)points[6].values[1]);
-		g.drawLine((int)points[3].values[0], (int)points[3].values[1], (int)points[7].values[0], (int)points[7].values[1]);
+	private void draw_edge(Graphics g, int node1, int node2, Vector[] points) {
+		g.drawLine((int)(width / 2 - points[node1].values[0]), (int)(height / 2 - points[node1].values[1]),
+				(int)(width / 2 - points[node2].values[0]), (int)(height / 2 - points[node2].values[1]));
 	}
 	
 	public ArrayList<RenderObject> getRenderObjects() {
