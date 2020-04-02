@@ -170,11 +170,11 @@ public class Display {
 			{0, 1, 0}
 		});
 		
-		/*double angle = Math.PI / 6;
+		double angle = Math.PI / 6;
 		Matrix rotation_matrix_x = new Matrix(new double[][] {
-			{Math.cos(angle), -Math.sin(angle), 0},
-			{Math.sin(angle), Math.cos(angle), 0}
-		});*/
+			{Math.cos(angle), -Math.sin(angle)},
+			{Math.sin(angle), Math.cos(angle)}
+		});
 		
 		for (Vector point : points)
 			for (int i = 0; i < 3; i++)
@@ -185,13 +185,13 @@ public class Display {
 		for (int i = 0; i < 4; i++)
 			result_points[i] = MatOp.matrixToVector(MatOp.multiply(projection_matrix, points[i]));
 		
-		/*for (int i = 0; i < 4; i++)
-			result_points[i] = points[i].multiply(rotation_matrix_x);*/
+		for (int i = 0; i < 4; i++)
+			result_points[i] = MatOp.matrixToVector(MatOp.multiply(rotation_matrix_x, result_points[i]));
 		
-		draw_point(g, (int)result_points[0].values[0], (int)result_points[0].values[1], 8);
-		draw_point(g, (int)result_points[1].values[0], (int)result_points[1].values[1], 8);
-		draw_point(g, (int)result_points[2].values[0], (int)result_points[2].values[1], 8);
-		draw_point(g, (int)result_points[3].values[0], (int)result_points[3].values[1], 8);
+		draw_point(g, (int)(width / 2 - result_points[0].values[0]), (int)(height / 2 - result_points[0].values[1]), 8);
+		draw_point(g, (int)(width / 2 - result_points[1].values[0]), (int)(height / 2 - result_points[1].values[1]), 8);
+		draw_point(g, (int)(width / 2 - result_points[2].values[0]), (int)(height / 2 - result_points[2].values[1]), 8);
+		draw_point(g, (int)(width / 2 - result_points[3].values[0]), (int)(height / 2 - result_points[3].values[1]), 8);
 		
 		// 3D PROJECTION TEST
 		
