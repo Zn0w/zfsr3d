@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import com.zn0w.zfsr3d.fs_components.Node;
 import com.zn0w.zfsr3d.graphics.DirectoryRenderObject2D;
+import com.zn0w.zfsr3d.graphics.DirectoryRenderObject3D;
 import com.zn0w.zfsr3d.graphics.FileRenderObject2D;
-import com.zn0w.zfsr3d.graphics.RenderObject;
+import com.zn0w.zfsr3d.graphics.FileRenderObject3D;
 import com.zn0w.zfsr3d.graphics.RenderObject2D;
+import com.zn0w.zfsr3d.graphics.RenderObject3D;
+import com.zn0w.zfsr3d.math.Vector;
 
 public class FileTreeToRenderObjectsTranslator {
 	
@@ -116,50 +119,46 @@ public class FileTreeToRenderObjectsTranslator {
 		return render_objects;
 	}
 	
-	/*public static ArrayList<RenderObject> translate_to_dynamic3d_view(Node node, int display_width, int display_height) {
-		ArrayList<RenderObject> render_objects = new ArrayList<RenderObject>();
-		int center_x = display_width / 2;
-		int center_y = display_height / 4 * 3;
+	public static ArrayList<RenderObject3D> translate_to_dynamic3d_view(Node node, int display_width, int display_height) {
+		ArrayList<RenderObject3D> render_objects = new ArrayList<RenderObject3D>();
 		int size = (display_width + display_height) / 10;
 		
 		if (node.isDirectory()) {
-			RenderObject selected_object = new DirectoryRenderObject(
-					center_x - size / 2, center_y - size / 2, center_x + size / 2, center_y + size / 2, node.getComponentName()
-					);
+			RenderObject3D selected_object = new DirectoryRenderObject3D(
+				node.getComponentName(),
+				new Vector(new double[] {0, -display_height / 4, 0}),
+				size
+			);
 			render_objects.add(selected_object);
 			
-			int child_center_x = display_width / 2;
+			int child_center_x = 0;
 			int child_center_y = display_height / 4;
 			int child_size = (int) (size * 0.75);
 			int x_margin = (int) (child_size * 3.5);
 			
-			int left_count = 1;
-			int right_count = 0;	// since if i=0, it treats it like a right one, event though i=0 is inherited center
-			int i = 0;
+			int i = -1;
 			for (Node child : node.getChildren())
 			{
-				int new_child_center_x;
 				if (i % 2 == 0) {
-					new_child_center_x = child_center_x + right_count * x_margin;
-					right_count++;
+					child_center_x *= -1;
+					child_center_x += x_margin;
 				}
 				else {
-					new_child_center_x = child_center_x - left_count * x_margin;
-					left_count++;
+					child_center_x *= -1;
 				}
 				
-				RenderObject child_object;
+				RenderObject3D child_object;
 				if (child.isDirectory())
-					child_object = new DirectoryRenderObject(
-						new_child_center_x - child_size / 2, child_center_y - child_size / 2,
-						new_child_center_x + child_size / 2, child_center_y + child_size / 2,
-						child.getComponentName()
+					child_object = new DirectoryRenderObject3D(
+						child.getComponentName(),
+						new Vector(new double[] {child_center_x, child_center_y, 0}),
+						child_size
 					);
 				else
-					child_object = new FileRenderObject(
-						new_child_center_x - child_size / 2, child_center_y - child_size / 2,
-						new_child_center_x + child_size / 2, child_center_y + child_size / 2,
-						child.getComponentName()
+					child_object = new FileRenderObject3D(
+						child.getComponentName(),
+						new Vector(new double[] {child_center_x, child_center_y, 0}),
+						child_size
 					);
 				render_objects.add(child_object);
 				
@@ -167,13 +166,15 @@ public class FileTreeToRenderObjectsTranslator {
 			}
 		}
 		else {
-			RenderObject selected_object = new FileRenderObject(
-					center_x - size / 2, center_y - size / 2, center_x + size / 2, center_y + size / 2, node.getComponentName()
-					);
+			RenderObject3D selected_object = new FileRenderObject3D(
+				node.getComponentName(),
+				new Vector(new double[] {0, -display_height / 4, 0}),
+				size
+			);
 			render_objects.add(selected_object);
 		}
 		
 		return render_objects;
-	}*/
+	}
 	
 }

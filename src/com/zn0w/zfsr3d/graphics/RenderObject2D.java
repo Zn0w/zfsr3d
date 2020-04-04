@@ -3,7 +3,7 @@ package com.zn0w.zfsr3d.graphics;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public abstract class RenderObject2D extends RenderObject {
+public abstract class RenderObject2D {
 	
 	public int x1, y1, x2, y2;
 	public String name;

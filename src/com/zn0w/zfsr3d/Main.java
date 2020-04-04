@@ -10,9 +10,10 @@ import com.zn0w.zfsr3d.fs_components.FileTree;
 import com.zn0w.zfsr3d.fs_components.FileTreeGenerator;
 import com.zn0w.zfsr3d.fs_components.Node;
 import com.zn0w.zfsr3d.graphics.Display;
+import com.zn0w.zfsr3d.graphics.Display.RenderMode;
 import com.zn0w.zfsr3d.graphics.GlobalGraphicsSettings;
-import com.zn0w.zfsr3d.graphics.RenderObject;
 import com.zn0w.zfsr3d.graphics.RenderObject2D;
+import com.zn0w.zfsr3d.graphics.RenderObject3D;
 import com.zn0w.zfsr3d.input.KeyboardInput;
 import com.zn0w.zfsr3d.input.MouseAction;
 import com.zn0w.zfsr3d.input.MouseActionType;
@@ -34,7 +35,7 @@ public class Main {
 	private static ViewMode view_mode = ViewMode.TREEVIEW;
 	private static ArrayList<RenderObject2D> computed_treeview = new ArrayList<RenderObject2D>();
 	private static HashMap<Node, ArrayList<RenderObject2D>> computed_dynamic2d_view = new HashMap<Node, ArrayList<RenderObject2D>>();
-	private static HashMap<Node, ArrayList<RenderObject>> computed_dynamic3d_view = new HashMap<Node, ArrayList<RenderObject>>();
+	private static HashMap<Node, ArrayList<RenderObject3D>> computed_dynamic3d_view = new HashMap<Node, ArrayList<RenderObject3D>>();
 	private static Node current_node;	// current_node is used while in one of the dynamic view modes
 	
 	
@@ -203,17 +204,18 @@ public class Main {
 	}
 	
 	private static void set_up_dynamic3d_view_scene() {
-		/*if (!computed_dynamic3d_view.containsKey(current_node)) {
-			ArrayList<RenderObject> render_objects =
+		if (!computed_dynamic3d_view.containsKey(current_node)) {
+			ArrayList<RenderObject3D> render_objects =
 					FileTreeToRenderObjectsTranslator.translate_to_dynamic3d_view(
 							current_node, display.getWidth(), display.getHeight()
 							);
 			computed_dynamic3d_view.put(current_node, render_objects);
 		}
 		
-		display.setRenderObjects2D(computed_dynamic3d_view.get(current_node));
+		display.setRenderObjects3D(computed_dynamic3d_view.get(current_node));
 		
-		center_camera();*/
+		center_camera();
+		display.render_mode = RenderMode.RENDER_3D;
 	}
 		
 }
