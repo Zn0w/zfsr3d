@@ -12,6 +12,7 @@ import com.zn0w.zfsr3d.fs_components.Node;
 import com.zn0w.zfsr3d.graphics.Display;
 import com.zn0w.zfsr3d.graphics.GlobalGraphicsSettings;
 import com.zn0w.zfsr3d.graphics.RenderObject;
+import com.zn0w.zfsr3d.graphics.RenderObject2D;
 import com.zn0w.zfsr3d.input.KeyboardInput;
 import com.zn0w.zfsr3d.input.MouseAction;
 import com.zn0w.zfsr3d.input.MouseActionType;
@@ -27,12 +28,13 @@ public class Main {
 	private static final int CAMERA_SPEED = 1;
 	
 	private enum ViewMode {
-		TREEVIEW, DYNAMIC_2D_VIEW
+		TREEVIEW, DYNAMIC_2D_VIEW, DYNAMIC_3D_VIEW
 	};
 	
 	private static ViewMode view_mode = ViewMode.TREEVIEW;
-	private static ArrayList<RenderObject> computed_treeview = new ArrayList<RenderObject>();
-	private static HashMap<Node, ArrayList<RenderObject>> computed_dynamic2d_view = new HashMap<Node, ArrayList<RenderObject>>();
+	private static ArrayList<RenderObject2D> computed_treeview = new ArrayList<RenderObject2D>();
+	private static HashMap<Node, ArrayList<RenderObject2D>> computed_dynamic2d_view = new HashMap<Node, ArrayList<RenderObject2D>>();
+	private static HashMap<Node, ArrayList<RenderObject>> computed_dynamic3d_view = new HashMap<Node, ArrayList<RenderObject>>();
 	private static Node current_node;	// current_node is used while in one of the dynamic view modes
 	
 	
@@ -58,7 +60,7 @@ public class Main {
 			int initial_size = 100;
 			// by default the view is treeview
 			FileTreeToRenderObjectsTranslator.translate_to_treeview(computed_treeview, null, fs.getRoot(), initial_size, 0.75, display.getWidth() / 2, 10 + initial_size / 2);
-			display.setRenderObjects(computed_treeview);
+			display.setRenderObjects2D(computed_treeview);
 			
 			current_node = fs.getRoot();
 			
@@ -118,6 +120,10 @@ public class Main {
 			view_mode = ViewMode.DYNAMIC_2D_VIEW;
 			set_up_dynamic2d_view_scene();
 		}
+		if (keyboard_input.wasKeyStroked(KeyEvent.VK_G)) {
+			view_mode = ViewMode.DYNAMIC_3D_VIEW;
+			set_up_dynamic3d_view_scene();
+		}
 	}
 	
 	public static void process_mouse_input(long delta_time) {
@@ -125,7 +131,7 @@ public class Main {
 			// focus camera on the clicked location (move camera center to the location)
 			if (mouse_action.type == MouseActionType.LEFT_CLICK) {
 				//System.out.println(mouse_action.x + "  " + mouse_action.y);
-				for (RenderObject render_object : display.getRenderObjects()) {
+				for (RenderObject2D render_object : display.getRenderObjects2D()) {
 					if (display.getCamera().captures(render_object)) {
 						int offset_x = -display.getCamera().getOriginX();
 						int offset_y = -display.getCamera().getOriginY();
@@ -178,22 +184,36 @@ public class Main {
 	}
 	
 	private static void set_up_treeview_scene() {
-		display.setRenderObjects(computed_treeview);
+		display.setRenderObjects2D(computed_treeview);
 		center_camera();
 	}
 	
 	private static void set_up_dynamic2d_view_scene() {
 		if (!computed_dynamic2d_view.containsKey(current_node)) {
-			ArrayList<RenderObject> render_objects =
+			ArrayList<RenderObject2D> render_objects =
 					FileTreeToRenderObjectsTranslator.translate_to_dynamic2d_view(
 							current_node, display.getWidth(), display.getHeight()
 							);
 			computed_dynamic2d_view.put(current_node, render_objects);
 		}
 		
-		display.setRenderObjects(computed_dynamic2d_view.get(current_node));
+		display.setRenderObjects2D(computed_dynamic2d_view.get(current_node));
 		
 		center_camera();
+	}
+	
+	private static void set_up_dynamic3d_view_scene() {
+		/*if (!computed_dynamic3d_view.containsKey(current_node)) {
+			ArrayList<RenderObject> render_objects =
+					FileTreeToRenderObjectsTranslator.translate_to_dynamic3d_view(
+							current_node, display.getWidth(), display.getHeight()
+							);
+			computed_dynamic3d_view.put(current_node, render_objects);
+		}
+		
+		display.setRenderObjects2D(computed_dynamic3d_view.get(current_node));
+		
+		center_camera();*/
 	}
 		
 }

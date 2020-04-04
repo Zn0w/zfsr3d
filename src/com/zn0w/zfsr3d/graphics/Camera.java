@@ -34,7 +34,7 @@ public class Camera {
 		return height;
 	}
 	
-	public boolean captures(RenderObject object) {
+	public boolean captures(RenderObject2D object) {
 		return 	object.x1 * scale <= (origin_x * scale + width) &&
 				object.x2 * scale >= origin_x * scale &&
 				object.y1 * scale <= (origin_y * scale + height) &&

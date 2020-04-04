@@ -22,7 +22,7 @@ public class Display {
 	private BufferedImage image;
     private Graphics2D g;
     
-    private ArrayList<RenderObject> render_objects = new ArrayList<RenderObject>();
+    private ArrayList<RenderObject2D> render_objects_2d = new ArrayList<RenderObject2D>();
     
     private int width, height;
 	private Color clear_color;
@@ -55,7 +55,7 @@ public class Display {
 		g.setColor(clear_color);
 		g.fillRect(0, 0, width, height);
 		
-		for (RenderObject render_object : render_objects) {
+		for (RenderObject2D render_object : render_objects_2d) {
 			if (render_object.parent != null && render_object.parent.hide_children) {
 				render_object.hide_children = true;
 				continue;
@@ -85,8 +85,8 @@ public class Display {
 			{0, 1, 0}
 		});
 		
-		//double angle = Math.PI / 6;
-		double angle = System.currentTimeMillis() / 10 * Math.PI / 72;
+		double angle = Math.PI / 4;
+		//double angle = System.currentTimeMillis() / 10 * Math.PI / 72;
 		
 		Matrix rotation_matrix_x = new Matrix(new double[][] {
 			{1, 0, 0},
@@ -157,12 +157,12 @@ public class Display {
 				(int)(width / 2 - points[node2].values[0]), (int)(height / 2 - points[node2].values[1]));
 	}
 	
-	public ArrayList<RenderObject> getRenderObjects() {
-		return render_objects;
+	public ArrayList<RenderObject2D> getRenderObjects2D() {
+		return render_objects_2d;
 	}
 	
-	public void setRenderObjects(ArrayList<RenderObject> render_objects) {
-		this.render_objects = render_objects;
+	public void setRenderObjects2D(ArrayList<RenderObject2D> render_objects) {
+		this.render_objects_2d = render_objects;
 	}
 	
 	public boolean isClosed() {
