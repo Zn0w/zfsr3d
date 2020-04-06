@@ -59,7 +59,7 @@ public class DirectoryRenderObject3D extends RenderObject3D {
 	}
 	
 	@Override
-	void draw(Graphics g, Matrix projection, Matrix rotation, Matrix scale, int screen_width, int screen_height) {
+	void draw(Graphics g, Matrix projection, Matrix rotation, Matrix scale, Vector coordinates_origin, Camera3D camera) {
 		// apply rotation matrix
 		Vector rotated_points[] = new Vector[8];
 		for (int i = 0; i < 8; i++) {
@@ -72,22 +72,22 @@ public class DirectoryRenderObject3D extends RenderObject3D {
 			result_points[i] = MatOp.matrixToVector(MatOp.multiply(projection, rotated_points[i]));
 		
 		// render resulting points
-		g.setColor(Color.GREEN);
+		g.setColor(Color.YELLOW);
 		for (int i = 0; i < 8; i++)
-			draw_point(g, (int)(screen_width / 2 - result_points[i].values[0]), (int)(screen_height / 2 - result_points[i].values[1]), 8);
+			draw_point(g, (int)(coordinates_origin.values[0] - result_points[i].values[0]), (int)(coordinates_origin.values[1] - result_points[i].values[1]), 8);
 		
-		draw_edge(g, 0, 1, result_points, screen_width, screen_height);
-		draw_edge(g, 1, 2, result_points, screen_width, screen_height);
-		draw_edge(g, 2, 3, result_points, screen_width, screen_height);
-		draw_edge(g, 3, 0, result_points, screen_width, screen_height);
-		draw_edge(g, 0, 4, result_points, screen_width, screen_height);
-		draw_edge(g, 1, 5, result_points, screen_width, screen_height);
-		draw_edge(g, 2, 6, result_points, screen_width, screen_height);
-		draw_edge(g, 3, 7, result_points, screen_width, screen_height);
-		draw_edge(g, 4, 5, result_points, screen_width, screen_height);
-		draw_edge(g, 5, 6, result_points, screen_width, screen_height);
-		draw_edge(g, 6, 7, result_points, screen_width, screen_height);
-		draw_edge(g, 7, 4, result_points, screen_width, screen_height);
+		draw_edge(g, 0, 1, result_points, coordinates_origin);
+		draw_edge(g, 1, 2, result_points, coordinates_origin);
+		draw_edge(g, 2, 3, result_points, coordinates_origin);
+		draw_edge(g, 3, 0, result_points, coordinates_origin);
+		draw_edge(g, 0, 4, result_points, coordinates_origin);
+		draw_edge(g, 1, 5, result_points, coordinates_origin);
+		draw_edge(g, 2, 6, result_points, coordinates_origin);
+		draw_edge(g, 3, 7, result_points, coordinates_origin);
+		draw_edge(g, 4, 5, result_points, coordinates_origin);
+		draw_edge(g, 5, 6, result_points, coordinates_origin);
+		draw_edge(g, 6, 7, result_points, coordinates_origin);
+		draw_edge(g, 7, 4, result_points, coordinates_origin);
 	}
 	
 }

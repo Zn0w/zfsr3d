@@ -18,6 +18,7 @@ import com.zn0w.zfsr3d.input.KeyboardInput;
 import com.zn0w.zfsr3d.input.MouseAction;
 import com.zn0w.zfsr3d.input.MouseActionType;
 import com.zn0w.zfsr3d.input.MouseInput;
+import com.zn0w.zfsr3d.math.Vector;
 
 public class Main {
 	
@@ -108,6 +109,15 @@ public class Main {
 				dx = (int) (CAMERA_SPEED * delta_time);
 			
 			display.getCamera().move(dx, 0);
+		}
+		else if (view_mode == ViewMode.DYNAMIC_3D_VIEW) {
+			double dz = 0;
+			if (keyboard_input.isKeyPressed(KeyEvent.VK_UP))
+				dz = (CAMERA_SPEED * 0.0002);
+			else if (keyboard_input.isKeyPressed(KeyEvent.VK_DOWN))
+				dz = (-CAMERA_SPEED * 0.0002);
+			
+			display.getCamera3D().move(new Vector(new double[] {0, 0, dz}));
 		}
 		
 		if (keyboard_input.wasKeyStroked(KeyEvent.VK_S)) {

@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.zn0w.zfsr3d.math.Matrix;
+import com.zn0w.zfsr3d.math.Vector;
 import com.zn0w.zfsr3d.math.MatOp;
 
 public class Display {
@@ -28,6 +29,7 @@ public class Display {
 	private Color clear_color;
 	
 	private Camera camera;
+	private Camera3D camera_3d;
 	
 	// TODO temporary solution, before introducing special Render classes
 	public enum RenderMode {
@@ -54,6 +56,11 @@ public class Display {
 		frame.setVisible(true);
 		
 		camera = new Camera(0, 0, width, height);
+		camera_3d = new Camera3D(
+			new Vector(new double[] {0, 0, 1}),
+			new Vector(new double[] {0, 0, 0}),
+			new Vector(new double[] {width, height})
+		);
 	}
 	
 	private void render_2d() {
@@ -109,13 +116,14 @@ public class Display {
 		});
 		
 		for (RenderObject3D render_object : render_objects_3d) {
-			render_object.draw(
-				g, projection_matrix,
-				MatOp.multiply(MatOp.multiply(rotation_matrix_z, rotation_matrix_y), rotation_matrix_x),
-				new Matrix(new double[][] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}),
-				width,
-				height
-			);
+			if (camera_3d.captures(render_object))
+				render_object.draw(
+						g, projection_matrix,
+						MatOp.multiply(MatOp.multiply(rotation_matrix_z, rotation_matrix_y), rotation_matrix_x),
+						new Matrix(new double[][] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}),
+						new Vector(new double[] {width / 2, height / 2}),
+						camera_3d
+				);
 		}
 		
 		Graphics g2 = panel.getGraphics();
@@ -172,6 +180,10 @@ public class Display {
 	
 	public Camera getCamera() {
 		return camera;
+	}
+	
+	public Camera3D getCamera3D() {
+		return camera_3d;
 	}
 	
 }

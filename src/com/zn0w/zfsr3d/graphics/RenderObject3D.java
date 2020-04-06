@@ -21,11 +21,12 @@ public abstract class RenderObject3D {
 		g.fillOval(x - r / 2, y - r / 2, r, r);
 	}
 	
-	protected void draw_edge(Graphics g, int node1, int node2, Vector[] points, int screent_width, int screen_height) {
-		g.drawLine((int)(screent_width / 2 - points[node1].values[0]), (int)(screen_height / 2 - points[node1].values[1]),
-				(int)(screent_width / 2 - points[node2].values[0]), (int)(screen_height / 2 - points[node2].values[1]));
+	protected void draw_edge(Graphics g, int node1, int node2, Vector[] points, Vector coordinates_origin) {
+		g.drawLine((int)(coordinates_origin.values[0] - points[node1].values[0]), (int)(coordinates_origin.values[1] - points[node1].values[1]),
+				(int)(coordinates_origin.values[0] - points[node2].values[0]), (int)(coordinates_origin.values[1] - points[node2].values[1]));
 	}
 	
-	abstract void draw(Graphics g, Matrix projection, Matrix rotation, Matrix scale, int screen_width, int screen_height);
+	// TODO change argument camera to the camera matrix
+	abstract void draw(Graphics g, Matrix projection, Matrix rotation, Matrix scale, Vector coordinates_origin, Camera3D camera);
 	
 }
