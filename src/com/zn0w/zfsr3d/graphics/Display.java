@@ -56,10 +56,34 @@ public class Display {
 		frame.setVisible(true);
 		
 		camera = new Camera(0, 0, width, height);
+		
+		double angle_x = Math.PI / 6;
+		double angle_y = Math.PI / 12;
+		double angle_z = 0;
+		
+		Matrix rotation_matrix_x = new Matrix(new double[][] {
+			{1, 0, 0},
+			{0, Math.cos(angle_x), -Math.sin(angle_x)},
+			{0, Math.sin(angle_x), Math.cos(angle_x)}
+		});
+		
+		Matrix rotation_matrix_y = new Matrix(new double[][] {
+			{Math.cos(angle_y), 0, Math.sin(angle_y)},
+			{0, 1, 0},
+			{-Math.sin(angle_y), 0, Math.cos(angle_y)}
+		});
+		
+		Matrix rotation_matrix_z = new Matrix(new double[][] {
+			{Math.cos(angle_z), -Math.sin(angle_z), 0},
+			{Math.sin(angle_z), Math.cos(angle_z), 0},
+			{0, 0, 1}
+		});
+		
 		camera_3d = new Camera3D(
 			new Vector(new double[] {0, 0, 1}),
-			new Vector(new double[] {0, 0, 0}),
-			new Vector(new double[] {width, height})
+			new Vector(new double[] {angle_x, angle_y, angle_z}),
+			new Vector(new double[] {width, height}),
+			MatOp.multiply(MatOp.multiply(rotation_matrix_z, rotation_matrix_y), rotation_matrix_x)
 		);
 	}
 	
@@ -94,32 +118,10 @@ public class Display {
 			{0, 1, 0}
 		});
 		
-		double angle = Math.PI / 32;
-		//double angle = System.currentTimeMillis() / 10 * Math.PI / 72;
-		
-		Matrix rotation_matrix_x = new Matrix(new double[][] {
-			{1, 0, 0},
-			{0, Math.cos(angle), -Math.sin(angle)},
-			{0, Math.sin(angle), Math.cos(angle)}
-		});
-		
-		Matrix rotation_matrix_y = new Matrix(new double[][] {
-			{Math.cos(angle), 0, Math.sin(angle)},
-			{0, 1, 0},
-			{-Math.sin(angle), 0, Math.cos(angle)}
-		});
-		
-		Matrix rotation_matrix_z = new Matrix(new double[][] {
-			{Math.cos(angle), -Math.sin(angle), 0},
-			{Math.sin(angle), Math.cos(angle), 0},
-			{0, 0, 1}
-		});
-		
 		for (RenderObject3D render_object : render_objects_3d) {
 			if (camera_3d.captures(render_object))
 				render_object.draw(
 						g, projection_matrix,
-						MatOp.multiply(MatOp.multiply(rotation_matrix_z, rotation_matrix_y), rotation_matrix_x),
 						new Matrix(new double[][] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}),
 						new Vector(new double[] {width / 2, height / 2}),
 						camera_3d

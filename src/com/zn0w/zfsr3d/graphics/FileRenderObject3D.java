@@ -63,7 +63,7 @@ public class FileRenderObject3D extends RenderObject3D {
 	}
 	
 	@Override
-	void draw(Graphics g, Matrix projection, Matrix rotation, Matrix scale, Vector coordinates_origin, Camera3D camera) {
+	void draw(Graphics g, Matrix projection, Matrix scale, Vector coordinates_origin, Camera3D camera) {
 		// apply camera scale
 		Vector camera_scaled_points[] = new Vector[8];
 		// make a copy of the vertices array
@@ -79,7 +79,7 @@ public class FileRenderObject3D extends RenderObject3D {
 		// apply rotation matrix
 		Vector rotated_points[] = new Vector[8];
 		for (int i = 0; i < 8; i++) {
-			rotated_points[i] = MatOp.matrixToVector(MatOp.multiply(rotation, camera_scaled_points[i]));
+			rotated_points[i] = MatOp.matrixToVector(MatOp.multiply(camera.rotation_matrix, camera_scaled_points[i]));
 		}
 		
 		// get projected points

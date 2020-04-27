@@ -59,11 +59,11 @@ public class DirectoryRenderObject3D extends RenderObject3D {
 	}
 	
 	@Override
-	void draw(Graphics g, Matrix projection, Matrix rotation, Matrix scale, Vector coordinates_origin, Camera3D camera) {
+	void draw(Graphics g, Matrix projection, Matrix scale, Vector coordinates_origin, Camera3D camera) {
 		// apply rotation matrix
 		Vector rotated_points[] = new Vector[8];
 		for (int i = 0; i < 8; i++) {
-			rotated_points[i] = MatOp.matrixToVector(MatOp.multiply(rotation, vertices[i]));
+			rotated_points[i] = MatOp.matrixToVector(MatOp.multiply(camera.rotation_matrix, vertices[i]));
 		}
 		
 		// get projected points

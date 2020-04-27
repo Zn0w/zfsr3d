@@ -27,6 +27,6 @@ public abstract class RenderObject3D {
 	}
 	
 	// TODO change argument camera to the camera matrix
-	abstract void draw(Graphics g, Matrix projection, Matrix rotation, Matrix scale, Vector coordinates_origin, Camera3D camera);
+	abstract void draw(Graphics g, Matrix projection, Matrix scale, Vector coordinates_origin, Camera3D camera);
 	
 }
