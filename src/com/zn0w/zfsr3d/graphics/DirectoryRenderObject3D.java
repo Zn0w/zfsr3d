@@ -60,10 +60,34 @@ public class DirectoryRenderObject3D extends RenderObject3D {
 	
 	@Override
 	void draw(Graphics g, Matrix projection, Matrix scale, Vector coordinates_origin, Camera3D camera) {
+		Vector relative_position = new Vector(3);
+		for (int i = 0; i < 3; i++)
+			relative_position.values[i] = position.values[i] - camera.origin.values[i];
+		
+		Vector relative_vertices[] = new Vector[8];
+		for (int i = 0; i < 8; i++)
+			relative_vertices[i] = new Vector(new double[] {
+				vertices[i].values[0] - camera.origin.values[0],
+				vertices[i].values[1] - camera.origin.values[1],
+				vertices[i].values[2] - camera.origin.values[2]
+			});
+		
+		// apply camera scale
+		Vector camera_scaled_points[] = new Vector[8];
+		// make a copy of the vertices array
+		for (int i = 0; i < 8; i++)
+			camera_scaled_points[i] = new Vector(vertices[i].values.clone());
+		double dz = position.values[2] - camera.origin.values[2];
+		for (int i = 0; i < 8; i++) {
+			camera_scaled_points[i].values[0] /= (-dz);
+			camera_scaled_points[i].values[1] /= (-dz);
+			//vertices[i].values[0] /= (-dz);
+		}
+		
 		// apply rotation matrix
 		Vector rotated_points[] = new Vector[8];
 		for (int i = 0; i < 8; i++) {
-			rotated_points[i] = MatOp.matrixToVector(MatOp.multiply(camera.rotation_matrix, vertices[i]));
+			rotated_points[i] = MatOp.matrixToVector(MatOp.multiply(camera.rotation_matrix, camera_scaled_points[i]));
 		}
 		
 		// get projected points

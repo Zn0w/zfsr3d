@@ -117,7 +117,19 @@ public class Main {
 			else if (keyboard_input.isKeyPressed(KeyEvent.VK_DOWN))
 				dz = (-CAMERA_SPEED * 0.0002);
 			
-			display.getCamera3D().move(new Vector(new double[] {0, 0, dz}));
+			double dy = 0;
+			if (keyboard_input.isKeyPressed(KeyEvent.VK_NUMPAD8))
+				dy = (CAMERA_SPEED);
+			else if (keyboard_input.isKeyPressed(KeyEvent.VK_NUMPAD2))
+				dy = (-CAMERA_SPEED);
+			
+			double dx = 0;
+			if (keyboard_input.isKeyPressed(KeyEvent.VK_NUMPAD6))
+				dx = (CAMERA_SPEED);
+			else if (keyboard_input.isKeyPressed(KeyEvent.VK_NUMPAD4))
+				dx = (-CAMERA_SPEED);
+			
+			display.getCamera3D().move(new Vector(new double[] {dx, dy, dz}));
 		}
 		
 		if (keyboard_input.wasKeyStroked(KeyEvent.VK_S)) {
@@ -197,6 +209,7 @@ public class Main {
 	private static void set_up_treeview_scene() {
 		display.setRenderObjects2D(computed_treeview);
 		center_camera();
+		display.render_mode = RenderMode.RENDER_2D;
 	}
 	
 	private static void set_up_dynamic2d_view_scene() {
@@ -211,6 +224,7 @@ public class Main {
 		display.setRenderObjects2D(computed_dynamic2d_view.get(current_node));
 		
 		center_camera();
+		display.render_mode = RenderMode.RENDER_2D;
 	}
 	
 	private static void set_up_dynamic3d_view_scene() {
